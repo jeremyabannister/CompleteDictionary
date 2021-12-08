@@ -1,0 +1,88 @@
+//
+//  CompleteDictionary.swift
+//  
+//
+//  Created by Jeremy Bannister on 12/7/21.
+//
+
+/// You use CompleteDictionary with an enum as the Key, and any type you want as the value. The point of CompleteDictionary is that it guarantees that there is a value for every possible key, and therefore it returns non-optional values when subscripted.
+public struct CompleteDictionary <Key: CaseIterable & Hashable, Value>: ExpressionErgonomic {
+    
+    ///
+    private var dict: [Key: Value]
+    
+    ///
+    public init (initialValueGenerator: (Key)->Value) {
+        self.dict = Key.allCases.makeDictionary(initialValueGenerator)
+    }
+    
+    ///
+    public init? (_ dict: [Key: Value]) {
+        let allSatisfy = Key.allCases.allSatisfy { dict.keys.contains($0) }
+        guard allSatisfy else { return nil }
+        self.dict = dict
+    }
+}
+
+// MARK: - Exposed API
+public extension CompleteDictionary {
+    
+    ///
+    subscript (key: Key) -> Value {
+        get { dict[key]! }
+        set { dict[key] = newValue }
+    }
+    
+    ///
+    var keys: Dictionary<Key, Value>.Keys {
+        dict.keys
+    }
+    
+    ///
+    var values: Dictionary<Key, Value>.Values {
+        dict.values
+    }
+    
+    ///
+    func forEach (_ body: ((key: Key, value: Value))->()) {
+        dict.forEach(body)
+    }
+    
+    ///
+    func reduce <Result> (into initialResult: Result, _ updateAccumulatingResult: (inout Result, (key: Key, value: Value))throws->()) rethrows -> Result {
+        try dict.reduce(into: initialResult, updateAccumulatingResult)
+    }
+}
+
+///
+extension CompleteDictionary: Codable where Key: Codable,
+                                            Value: Codable {
+    
+    ///
+    public func encode (to encoder: Encoder) throws {
+        try dict.encode(to: encoder)
+    }
+    
+    ///
+    public init (from decoder: Decoder) throws {
+        self.dict = try .init(from: decoder)
+    }
+}
+
+///
+extension CompleteDictionary: Hashable where Value: Hashable {
+    
+    ///
+    public func hash (into hasher: inout Hasher) {
+        hasher.combine(dict)
+    }
+}
+
+///
+extension CompleteDictionary: Equatable where Value: Equatable {
+    
+    ///
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.dict == rhs.dict
+    }
+}

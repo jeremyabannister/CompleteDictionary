@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CollectionToolkit",
+        "repositoryURL": "https://github.com/jeremyabannister/CollectionToolkit",
+        "state": {
+          "branch": null,
+          "revision": "42841f1175107990a3f8f8c6c974e56f3725ff16",
+          "version": "0.1.2"
+        }
+      },
+      {
+        "package": "ExpressionErgonomics",
+        "repositoryURL": "https://github.com/jeremyabannister/ExpressionErgonomics",
+        "state": {
+          "branch": null,
+          "revision": "eaf3f096129ba5a3f7cf2afd821c26a57c47da9b",
+          "version": "0.1.5"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
