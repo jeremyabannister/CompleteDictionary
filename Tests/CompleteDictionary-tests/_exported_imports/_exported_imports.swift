@@ -7,3 +7,4 @@
 
 ///
 @_exported import CompleteDictionary
+@_exported import FoundationTestToolkit

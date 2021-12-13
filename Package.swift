@@ -12,18 +12,28 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/jeremyabannister/CollectionToolkit",
-            from: "0.1.2"
+            url: "https://github.com/jeremyabannister/ExpressionErgonomics",
+            from: "0.1.8"
+        ),
+        .package(
+            url: "https://github.com/jeremyabannister/FoundationToolkit",
+            from: "0.1.0"
         ),
     ],
     targets: [
         .target(
             name: "CompleteDictionary",
-            dependencies: ["CollectionToolkit"]
+            dependencies: [
+                "FoundationToolkit",
+                "ExpressionErgonomics"
+            ]
         ),
         .testTarget(
             name: "CompleteDictionary-tests",
-            dependencies: ["CompleteDictionary"]
+            dependencies: [
+                "CompleteDictionary",
+                .product(name: "FoundationTestToolkit", package: "FoundationToolkit")
+            ]
         ),
     ]
 )
