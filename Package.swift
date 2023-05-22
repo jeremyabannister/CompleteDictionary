@@ -1,7 +1,9 @@
-// swift-tools-version:5.4
+// swift-tools-version:5.8
 
+///
 import PackageDescription
 
+///
 let package = Package(
     name: "CompleteDictionary",
     products: [
@@ -13,11 +15,11 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/jeremyabannister/ExpressionErgonomics",
-            from: "0.1.8"
+            "0.3.2" ..< "0.4.0"
         ),
         .package(
             url: "https://github.com/jeremyabannister/FoundationToolkit",
-            from: "0.1.0"
+            "0.7.0" ..< "0.8.0"
         ),
     ],
     targets: [
@@ -25,14 +27,21 @@ let package = Package(
             name: "CompleteDictionary",
             dependencies: [
                 "FoundationToolkit",
-                "ExpressionErgonomics"
+                "ExpressionErgonomics",
             ]
         ),
         .testTarget(
             name: "CompleteDictionary-tests",
             dependencies: [
+                
+                ///
                 "CompleteDictionary",
-                .product(name: "FoundationTestToolkit", package: "FoundationToolkit")
+                
+                ///
+                .product(
+                    name: "FoundationTestToolkit",
+                    package: "FoundationToolkit"
+                ),
             ]
         ),
     ]

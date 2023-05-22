@@ -25,38 +25,59 @@ public struct CompleteDictionary <Key: CaseIterable & Hashable, Value>: Expressi
 }
 
 // MARK: - Exposed API
-public extension CompleteDictionary {
+extension CompleteDictionary {
     
     ///
-    subscript (key: Key) -> Value {
+    public subscript (key: Key) -> Value {
         get { dict[key]! }
         set { dict[key] = newValue }
     }
     
     ///
-    var keys: Dictionary<Key, Value>.Keys {
+    public var keys: Dictionary<Key, Value>.Keys {
         dict.keys
     }
     
     ///
-    var values: Dictionary<Key, Value>.Values {
+    public var values: Dictionary<Key, Value>.Values {
         dict.values
     }
     
     ///
-    func forEach (_ body: ((key: Key, value: Value))->()) {
-        dict.forEach(body)
+    public func map
+        <Element>
+        (_ transform: ((key: Key, value: Value))throws->Element)
+    rethrows -> [Element] {
+        
+        ///
+        try dict.map(transform)
     }
     
     ///
-    func reduce <Result> (into initialResult: Result, _ updateAccumulatingResult: (inout Result, (key: Key, value: Value))throws->()) rethrows -> Result {
+    public func forEach
+        (_ body: ((key: Key, value: Value))throws->())
+    rethrows {
+        
+        ///
+        try dict.forEach(body)
+    }
+    
+    ///
+    public func reduce
+        <Result>
+        (into initialResult: Result,
+         _ updateAccumulatingResult: (inout Result, (key: Key, value: Value))throws->())
+    rethrows -> Result {
+        
+        ///
         try dict.reduce(into: initialResult, updateAccumulatingResult)
     }
 }
 
 ///
-extension CompleteDictionary: Codable where Key: Codable,
-                                            Value: Codable {
+extension CompleteDictionary: Codable
+    where Key: Codable,
+          Value: Codable {
     
     ///
     public func encode (to encoder: Encoder) throws {
@@ -70,7 +91,8 @@ extension CompleteDictionary: Codable where Key: Codable,
 }
 
 ///
-extension CompleteDictionary: Hashable where Value: Hashable {
+extension CompleteDictionary: Hashable
+    where Value: Hashable {
     
     ///
     public func hash (into hasher: inout Hasher) {
@@ -79,7 +101,8 @@ extension CompleteDictionary: Hashable where Value: Hashable {
 }
 
 ///
-extension CompleteDictionary: Equatable where Value: Equatable {
+extension CompleteDictionary: Equatable
+    where Value: Equatable {
     
     ///
     public static func == (lhs: Self, rhs: Self) -> Bool {
